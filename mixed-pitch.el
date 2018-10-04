@@ -4,7 +4,7 @@
 
 ;; Author: J. Alexander Branham <branham@utexas.edu>
 ;; Maintainer: J. Alexander Branham <branham@utexas.edu>
-;; URL: https://github.com/jabranham/mixed-pitch
+;; URL: https://gitlab.com/jabranham/mixed-pitch
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.3"))
 
