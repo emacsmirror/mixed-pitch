@@ -46,7 +46,6 @@
 ;;; Code:
 
 (require 'face-remap)
-(require 'cl-lib)
 
 (defgroup mixed-pitch nil
   "Mix variable and fixed pitch in a single buffer."
