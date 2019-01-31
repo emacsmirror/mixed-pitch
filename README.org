@@ -21,6 +21,16 @@ If you use =use-package=:
     ;; If you want it in all text modes:
     (text-mode . mixed-pitch-mode))
 #+END_SRC
+* How it works
+When activated, the minor mode
+
+- changes the family and height of the default face to the family and
+  height of the ~variable-pitch~ face;
+- changes the family and height of every face in
+  ~mixed-pitch-fixed-pitch-faces~ to the family and height of the
+  ~default~ face; and
+- sets the cursor type to ~mixed-pitched-variable-pitch-cursor~ if it
+  is non-nil.
 * Known issues
 ** org SRC blocks shown in variable pitch
 ~mixed-pitch.el~ relies on a face introduced in org version 9.0 to make SRC blocks
