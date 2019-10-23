@@ -104,11 +104,13 @@
     org-code
     org-latex-and-related
     org-checkbox
+    org-formula
     org-meta-line
     org-table
     org-verbatim)
   "This is a list holding names of faces that will not be variable pitch when function `mixed-pitch-mode' is enabled."
   :type '(repeat face)
+  :package-version '(mixed-pitch . "1.0.2")
   :group 'mixed-pitch)
 
 (defcustom mixed-pitch-variable-pitch-cursor 'bar
