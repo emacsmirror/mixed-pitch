@@ -41,5 +41,5 @@ discussion in issue #2.
 ** Interaction with company
 If you use company for autocompletion, results in the popup window may
 appear to zig-zag. A workaround is to install and use [[https://github.com/sebastiencs/company-box][company-box]] or
-[[https://github.com/tumashu/company-childframe][company-childframe]]. As a bonus, this is currently much faster than
+[[https://github.com/tumashu/company-posframe][company-posframe]]. As a bonus, this is currently much faster than
 company's built-in mechanism.
