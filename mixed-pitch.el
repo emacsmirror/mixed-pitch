@@ -5,7 +5,7 @@
 ;; Author: J. Alexander Branham <branham@utexas.edu>
 ;; Maintainer: J. Alexander Branham <branham@utexas.edu>
 ;; URL: https://gitlab.com/jabranham/mixed-pitch
-;; Version: 1.0.1
+;; Version: 1.1.0
 ;; Package-Requires: ((emacs "24.3"))
 
 ;; This file is not part of GNU Emacs.
@@ -121,6 +121,14 @@ See `cursor-type' for a list of acceptable types."
   :type 'symbol
   :group 'mixed-pitch)
 
+(defcustom mixed-pitch-set-height nil
+  "If non-nil, set the height of the face.
+
+When nil, only set the family."
+  :type 'boolean
+  :package-version '(mixed-pitch . "1.1.0")
+  :group 'mixed-pitch)
+
 (defvar-local mixed-pitch-fixed-cookie nil)
 (defvar-local mixed-pitch-variable-cookie nil)
 (defvar-local mixed-pitch-cursor-type nil)
@@ -134,7 +142,9 @@ which faces remain fixed pitch. The height and pitch of faces is
 inherited from `variable-pitch' and `default'."
   :lighter " MPM"
   (let ((var-pitch (face-attribute 'variable-pitch :family))
-        (fix-pitch (face-attribute 'default :family)))
+        (var-height (face-attribute 'variable-pitch :height))
+        (fix-pitch (face-attribute 'default :family))
+        (fix-height (face-attribute 'default :height)))
     ;; Turn mixed-pitch-mode on:
     (if mixed-pitch-mode
         (progn
@@ -143,14 +153,18 @@ inherited from `variable-pitch' and `default'."
             (setq mixed-pitch-cursor-type cursor-type))
           ;; remap default face to variable pitch
           (setq mixed-pitch-variable-cookie
-                (face-remap-add-relative
-                 'default :family var-pitch))
+                (if mixed-pitch-set-height
+                    (face-remap-add-relative
+                     'default :family var-pitch :height var-height)
+                  (face-remap-add-relative 'default :family var-pitch)))
           (setq mixed-pitch-fixed-cookie nil)
           ;; keep fonts in `mixed-pitch-fixed-pitch-faces' as fixed-pitch.
           (dolist (face mixed-pitch-fixed-pitch-faces)
             (add-to-list 'mixed-pitch-fixed-cookie
-                         (face-remap-add-relative
-                          face :family fix-pitch)))
+                         (if mixed-pitch-set-height
+                             (face-remap-add-relative
+                              face :family fix-pitch :height fix-height)
+                           (face-remap-add-relative face :family fix-pitch))))
           ;; Change the cursor if the user requested:
           (when mixed-pitch-variable-pitch-cursor (setq cursor-type mixed-pitch-variable-pitch-cursor)))
       ;; Turn mixed-pitch-mode off:
