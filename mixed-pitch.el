@@ -78,6 +78,10 @@
     font-lock-string-face
     font-lock-type-face
     font-lock-variable-name-face
+    line-number
+    line-number-current-line
+    line-number-major-tick
+    line-number-minor-tick
     markdown-code-face
     markdown-gfm-checkbox-face
     markdown-inline-code-face
