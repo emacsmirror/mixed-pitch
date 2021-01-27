@@ -148,8 +148,10 @@ inherited from `variable-pitch' and `default'."
   :lighter " MPM"
   (let ((var-pitch (face-attribute 'variable-pitch :family))
         (var-height (face-attribute 'variable-pitch :height))
+        (var-weight (face-attribute 'variable-pitch :weight))
         (fix-pitch (face-attribute 'default :family))
-        (fix-height (face-attribute 'default :height)))
+        (fix-height (face-attribute 'default :height))
+        (fix-weight (face-attribute 'default :weight)))
     ;; Turn mixed-pitch-mode on:
     (if mixed-pitch-mode
         (progn
@@ -160,16 +162,16 @@ inherited from `variable-pitch' and `default'."
           (setq mixed-pitch-variable-cookie
                 (if mixed-pitch-set-height
                     (face-remap-add-relative
-                     'default :family var-pitch :height var-height)
-                  (face-remap-add-relative 'default :family var-pitch)))
+                     'default :family var-pitch :height var-height :weight var-weight)
+                  (face-remap-add-relative 'default :family var-pitch :weight var-weight)))
           (setq mixed-pitch-fixed-cookie nil)
           ;; keep fonts in `mixed-pitch-fixed-pitch-faces' as fixed-pitch.
           (dolist (face mixed-pitch-fixed-pitch-faces)
             (add-to-list 'mixed-pitch-fixed-cookie
                          (if mixed-pitch-set-height
                              (face-remap-add-relative
-                              face :family fix-pitch :height fix-height)
-                           (face-remap-add-relative face :family fix-pitch))))
+                              face :family fix-pitch :height fix-height :weight fix-weight)
+                           (face-remap-add-relative face :family fix-pitch :weight fix-weight))))
           ;; Change the cursor if the user requested:
           (when mixed-pitch-variable-pitch-cursor (setq cursor-type mixed-pitch-variable-pitch-cursor)))
       ;; Turn mixed-pitch-mode off:
