@@ -134,10 +134,17 @@ When nil, only set the family."
   :package-version '(mixed-pitch . "1.1.0")
   :group 'mixed-pitch)
 
+(defcustom mixed-pitch-face 'variable-pitch
+  "Variable pitch face to use."
+  :type 'face
+  :package-version '(mixed-pitch . "1.2.0")
+  :group 'mixed-pitch)
+
 (defvar-local mixed-pitch-fixed-cookie nil)
 (defvar-local mixed-pitch-variable-cookie nil)
 (defvar-local mixed-pitch-cursor-type nil)
 (defvar-local mixed-pitch--applied-p nil)
+(defvar-local mixed-pitch--face nil)
 
 ;;;###autoload
 (define-minor-mode mixed-pitch-mode
@@ -147,15 +154,21 @@ See the variable `mixed-pitch-fixed-pitch-faces' for a list of
 which faces remain fixed pitch. The height and pitch of faces is
 inherited from `variable-pitch' and `default'."
   :lighter " MPM"
-  (let ((var-pitch (face-attribute 'variable-pitch :family))
-        (var-height (face-attribute 'variable-pitch :height))
-        (var-weight (face-attribute 'variable-pitch :weight))
+  (let ((var-pitch (face-attribute mixed-pitch-face :family))
+        (var-height (face-attribute mixed-pitch-face :height))
+        (var-weight (face-attribute mixed-pitch-face :weight))
         (fix-pitch (face-attribute 'default :family))
         (fix-height (face-attribute 'default :height))
         (fix-weight (face-attribute 'default :weight)))
     ;; Turn mixed-pitch-mode on:
+    (when (and (eq arg 'toggle)
+               (not (eq mixed-pitch-face mixed-pitch--face))
+               (not mixed-pitch-mode))
+      ;; when toggling with a new face and mixed-pitch previously enabled
+      (setq mixed-pitch-mode t))
     (if mixed-pitch-mode
         (progn
+          (setq mixed-pitch--face mixed-pitch-face)
           ;; if already a remap applied, remove it first
           (when mixed-pitch--applied-p
             (face-remap-remove-relative mixed-pitch-variable-cookie)
