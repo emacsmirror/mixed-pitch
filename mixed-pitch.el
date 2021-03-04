@@ -137,6 +137,7 @@ When nil, only set the family."
 (defvar-local mixed-pitch-fixed-cookie nil)
 (defvar-local mixed-pitch-variable-cookie nil)
 (defvar-local mixed-pitch-cursor-type nil)
+(defvar-local mixed-pitch--applied-p nil)
 
 ;;;###autoload
 (define-minor-mode mixed-pitch-mode
@@ -155,6 +156,11 @@ inherited from `variable-pitch' and `default'."
     ;; Turn mixed-pitch-mode on:
     (if mixed-pitch-mode
         (progn
+          ;; if already a remap applied, remove it first
+          (when mixed-pitch--applied-p
+            (face-remap-remove-relative mixed-pitch-variable-cookie)
+            (dolist (cookie mixed-pitch-fixed-cookie)
+              (face-remap-remove-relative cookie)))
           ;; remember cursor type
           (when mixed-pitch-variable-pitch-cursor
             (setq mixed-pitch-cursor-type cursor-type))
@@ -173,14 +179,16 @@ inherited from `variable-pitch' and `default'."
                               face :family fix-pitch :height fix-height :weight fix-weight)
                            (face-remap-add-relative face :family fix-pitch :weight fix-weight))))
           ;; Change the cursor if the user requested:
-          (when mixed-pitch-variable-pitch-cursor (setq cursor-type mixed-pitch-variable-pitch-cursor)))
+          (when mixed-pitch-variable-pitch-cursor (setq cursor-type mixed-pitch-variable-pitch-cursor))
+          (setq mixed-pitch--applied-p t))
       ;; Turn mixed-pitch-mode off:
       (progn (face-remap-remove-relative mixed-pitch-variable-cookie)
              (dolist (cookie mixed-pitch-fixed-cookie)
                (face-remap-remove-relative cookie))
              ;; Restore the cursor if we changed it:
              (when mixed-pitch-variable-pitch-cursor
-               (setq cursor-type mixed-pitch-cursor-type))))))
+               (setq cursor-type mixed-pitch-cursor-type))
+             (setq mixed-pitch--applied-p nil)))))
 
 (provide 'mixed-pitch)
 ;;; mixed-pitch.el ends here
